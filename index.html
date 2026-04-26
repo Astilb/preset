@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>PRESET — настрой своё время</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, 'Roboto', sans-serif;
+            background: linear-gradient(145deg, #f5f5f7 0%, #e8e8ed 100%);
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .presentation-card {
+            max-width: 1280px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+        }
+
+        /* ШАПКА С ЛОГОТИПОМ */
+        .hero {
+            background: linear-gradient(112deg, #1766FE, #0d4fd1);
+            color: white;
+            padding: 2rem 1.5rem 1.8rem;
+            text-align: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: white;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .logo-icon svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .logo-text {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .hero h1 {
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero .subtitle {
+            font-size: clamp(0.9rem, 4vw, 1.1rem);
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        .hero p {
+            margin-top: 0.5rem;
+            opacity: 0.85;
+            font-size: clamp(0.8rem, 3vw, 0.9rem);
+        }
+
+        .badge-tip {
+            background: rgba(255,255,255,0.2);
+            display: inline-block;
+            padding: 0.25rem 1rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            margin-top: 0.9rem;
+        }
+
+        /* СЛАЙДЕР */
+        .slider-area {
+            background: #fafafc;
+            padding: 1.5rem;
+        }
+
+        .slider-wrapper {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .slider-container {
+            overflow: hidden;
+            border-radius: 1.5rem;
+        }
+
+        .slider-track {
+            display: flex;
+            transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        .slide {
+            min-width: 100%;
+            padding: 1rem;
+            text-align: center;
+            background: #fff;
+        }
+
+        .slide img {
+            max-width: 100%;
+            max-height: 55vh;
+            object-fit: contain;
+            border-radius: 1rem;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+            background: #fef9e8;
+        }
+
+        @media (max-width: 640px) {
+            .slide img {
+                max-height: 45vh;
+            }
+            .slide {
+                padding: 0.75rem;
+            }
+        }
+
+        .slide-caption {
+            margin-top: 0.75rem;
+            font-weight: 600;
+            color: #1766FE;
+            background: #e8f0ff;
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+        }
+
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(23, 102, 254, 0.85);
+            backdrop-filter: blur(4px);
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 60px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 12;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-btn:hover {
+            background: #0d4fd1;
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        @media (max-width: 640px) {
+            .nav-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 1.2rem;
+            }
+            .btn-prev { left: 8px; }
+            .btn-next { right: 8px; }
+        }
+
+        .btn-prev { left: 12px; }
+        .btn-next { right: 12px; }
+
+        .dots-panel {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #cbd5e1;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .dot.active {
+            background: #1766FE;
+            width: 24px;
+        }
+
+        .counter-info {
+            text-align: center;
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+            color: #7a6e5c;
+        }
+
+        .key-hint {
+            text-align: center;
+            font-size: 0.7rem;
+            margin-top: 0.5rem;
+            color: #7a6e5c;
+        }
+
+        .feedback-block {
+            background: white;
+            padding: 1.5rem;
+            border-top: 1px solid #e8e8ed;
+        }
+
+        .feedback-title {
+            font-size: clamp(1.3rem, 5vw, 1.8rem);
+            font-weight: 600;
+            color: #1766FE;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .feedback-sub {
+            color: #6b5e4e;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        .current-screen-badge {
+            background: #e8f0ff;
+            padding: 0.75rem;
+            border-radius: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+            color: #1766FE;
+            border-left: 4px solid #1766FE;
+            word-break: break-word;
+        }
+
+        .form-modern {
+            max-width: 620px;
+            margin: 0 auto;
+        }
+
+        .input-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: #1e293b;
+            display: block;
+            margin-bottom: 0.4rem;
+            font-size: 0.85rem;
+        }
+
+        .input-group input, 
+        .input-group select, 
+        .input-group textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 1rem;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: 0.2s;
+            background: #ffffff;
+        }
+
+        .input-group input:focus, 
+        .input-group select:focus, 
+        .input-group textarea:focus {
+            outline: none;
+            border-color: #1766FE;
+            box-shadow: 0 0 0 3px rgba(23, 102, 254, 0.15);
+        }
+
+        .rating-stars {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+        }
+
+        .rating-stars input { display: none; }
+        .rating-stars label {
+            font-size: 1.8rem;
+            color: #cbd5e1;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .rating-stars input:checked ~ label,
+        .rating-stars label:hover,
+        .rating-stars label:hover ~ label {
+            color: #f5b042;
+        }
+
+        @media (max-width: 480px) {
+            .rating-stars label {
+                font-size: 1.5rem;
+            }
+        }
+
+        .submit-btn {
+            background: linear-gradient(95deg, #1766FE, #0d4fd1);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 2.5rem;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        .submit-btn:hover {
+            background: #0d4fd1;
+            transform: translateY(-2px);
+        }
+
+        .toast-thanks {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            left: auto;
+            max-width: 340px;
+            background: linear-gradient(115deg, #1766FE, #0d4fd1);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 500;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            transform: translateX(120%);
+            transition: transform 0.35s ease-out;
+            font-size: 0.85rem;
+        }
+
+        .toast-thanks.show {
+            transform: translateX(0);
+        }
+
+        .toast-thanks span {
+            font-size: 1.4rem;
+        }
+
+        @media (max-width: 500px) {
+            .toast-thanks {
+                left: 16px;
+                right: 16px;
+                max-width: none;
+                border-radius: 30px;
+                bottom: 16px;
+                padding: 0.7rem 1.2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 0.5rem;
+            }
+            .hero {
+                padding: 1.5rem 1rem;
+            }
+            .slider-area {
+                padding: 1rem;
+            }
+            .feedback-block {
+                padding: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation-card">
+    <div class="hero">
+        <div class="logo-container">
+           <img src="./img/logo.svg" alt="">
+            <span class="logo-text">PRESET</span>
+        </div>
+        <div class="subtitle">Настрой своё время</div>
+        <p>Полезные советы и помощь в любых ситуациях</p>
+        <div class="badge-tip">Стрелки на экране или клавиши ◀ ▶ — отзыв привяжется к текущему экрану</div>
+    </div>
+
+    <!-- Слайдер — 15 экранов -->
+    <div class="slider-area">
+        <div class="slider-wrapper">
+            <button class="nav-btn btn-prev" id="prevSlideBtn">❮</button>
+            <button class="nav-btn btn-next" id="nextSlideBtn">❯</button>
+            <div class="slider-container">
+                <div class="slider-track" id="sliderTrack">
+    <!-- 1. Экран загрузки -->
+    <div class="slide" data-screen="Загрузка приложения">
+        <img src="/img/1.png" alt="screen 1" onerror="this.src='https://placehold.co/800x1400/1766FE/white?text=PRESET'">
+        <div class="slide-caption"></div>
+    </div>
+    <!-- 2. Описание приложения -->
+    <div class="slide" data-screen="Знакомство с сервисом">
+        <img src="/img/2.png" alt="screen 2" onerror="this.src='https://placehold.co/800x1400/f0f4ff/1766FE?text=Добро+пожаловать'">
+        <div class="slide-caption"></div>
+    </div>
+    <!-- 3. Цель входа -->
+    <div class="slide" data-screen="Кто вы?">
+        <img src="/img/3.png" alt="screen 3" onerror="this.src='https://placehold.co/800x1400/e8f0fe/1766FE?text=Клиент+или+исполнитель'">
+        <div class="slide-caption"></div>
+    </div>
+    <!-- 4. Вход -->
+    <div class="slide" data-screen="Вход в аккаунт">
+        <img src="/img/4.png" alt="screen 4" onerror="this.src='https://placehold.co/800x1400/fef3e0/1766FE?text=Вход'">
+        <div class="slide-caption"></div>
+    </div>
+    <!-- 5. Регистрация -->
+    <div class="slide" data-screen="Создание аккаунта">
+        <img src="/img/5.png" alt="screen 5" onerror="this.src='https://placehold.co/800x1400/f0e8e0/1766FE?text=Регистрация'">
+        <div class="slide-caption"></div>
+    </div>
+    <!-- 6. Код подтверждения -->
+    <div class="slide" data-screen="Подтверждение почты">
+        <img src="/img/6.png" alt="screen 6" onerror="this.src='https://placehold.co/800x1400/d9e8fe/1766FE?text=Введите+код'">
+        <div class="slide-caption"></div>
+    </div>
+    <!-- 7. Подходящий пакет -->
+    <div class="slide" data-screen="Выберите тариф">
+        <img src="/img/7.png" alt="screen 7" onerror="this.src='https://placehold.co/800x1400/e8dff0/1766FE?text=Тарифы'">
+        <div class="slide-caption"></div>
+    </div>
+    <!-- 13. Поиск исполнителей -->
+    <div class="slide" data-screen="Поиск специалистов">
+        <img src="/img/13.png" alt="screen 13" onerror="this.src='https://placehold.co/800x1400/d9e8fa/1766FE?text=Поиск'">
+        <div class="slide-caption"></div>
+    </div>
+    <!-- 12. Профиль исполнителя -->
+    <div class="slide" data-screen="Карточка специалиста">
+        <img src="/img/12.png" alt="screen 12" onerror="this.src='https://placehold.co/800x1400/fef0e0/1766FE?text=Профиль+исполнителя'">
+        <div class="slide-caption"></div>
+    </div>
+    <!-- 10. Чаты -->
+    <div class="slide" data-screen="Мои диалоги">
+        <img src="/img/10.png" alt="screen 10" onerror="this.src='https://placehold.co/800x1400/f5e0f0/1766FE?text=Чаты'">
+        <div class="slide-caption"></div>
+    </div>
+    <!-- 11. Переписка с исполнителем -->
+    <div class="slide" data-screen="Общение с исполнителем">
+        <img src="/img/11.png" alt="screen 11" onerror="this.src='https://placehold.co/800x1400/e8f0fa/1766FE?text=Чат'">
+        <div class="slide-caption"></div>
+    </div>
+    <!-- 14. Корзина -->
+    <div class="slide" data-screen="Мои заказы">
+        <img src="/img/14.png" alt="screen 14" onerror="this.src='https://placehold.co/800x1400/f0e8fe/1766FE?text=Корзина'">
+        <div class="slide-caption"></div>
+    </div>
+    <!-- 15. Оплата -->
+    <div class="slide" data-screen="Оформление и оплата">
+        <img src="/img/15.png" alt="screen 15" onerror="this.src='https://placehold.co/800x1400/f5e8e0/1766FE?text=Оплата'">
+        <div class="slide-caption"></div>
+    </div>
+    <!-- 9. Настройки -->
+    <div class="slide" data-screen="Настройки приложения">
+        <img src="/img/9.png" alt="screen 9" onerror="this.src='https://placehold.co/800x1400/e0f0e8/1766FE?text=Настройки'">
+        <div class="slide-caption"></div>
+    </div>
+    <!-- 8. Выход (последний) -->
+    <div class="slide" data-screen="Выход из аккаунта">
+        <img src="/img/8.png" alt="screen 8" onerror="this.src='https://placehold.co/800x1400/f5e0e0/1766FE?text=Выход'">
+        <div class="slide-caption"></div>
+    </div>
+</div>
+            </div>
+            <div class="dots-panel" id="dotsContainer"></div>
+            <div class="counter-info" id="counterInfo">Экран 1 из 15</div>
+            <div class="key-hint">Отзыв автоматически привяжется к экрану, который вы смотрите</div>
+        </div>
+    </div>
+
+    <!-- Форма отзыва -->
+    <div class="feedback-block">
+        <div class="feedback-title">Оставить отзыв о дизайне</div>
+        <div class="feedback-sub">Ваше мнение поможет сделать PRESET лучше</div>
+        
+        <div class="current-screen-badge" id="currentScreenBadge">
+            Отзыв будет привязан к экрану: <strong id="currentScreenName">Стартовый экран</strong>
+        </div>
+        
+        <form id="reviewForm" class="form-modern">
+            <div class="input-group">
+                <label>Ваше имя *</label>
+                <input type="text" id="reviewerName" placeholder="Например, Алиса" required>
+            </div>
+
+            <div class="input-group">
+                <label>Оцените дизайн экрана</label>
+                <div class="rating-stars">
+                    <input type="radio" name="reviewRating" value="5" id="star5"><label for="star5">★</label>
+                    <input type="radio" name="reviewRating" value="4" id="star4"><label for="star4">★</label>
+                    <input type="radio" name="reviewRating" value="3" id="star3"><label for="star3">★</label>
+                    <input type="radio" name="reviewRating" value="2" id="star2"><label for="star2">★</label>
+                    <input type="radio" name="reviewRating" value="1" id="star1"><label for="star1">★</label>
+                </div>
+            </div>
+
+           
+
+            <div class="input-group">
+                <label>Ваш отзыв или замечание *</label>
+                <textarea id="reviewText" rows="3" placeholder="Что понравилось? Что можно улучшить?" required></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn"> Отправить отзыв — привяжется к этому экрану</button>
+        </form>
+    </div>
+</div>
+
+<div id="thanksToast" class="toast-thanks">
+    <span>🙌</span>
+    <div>
+        <strong>Спасибо за ваш отзыв!</strong><br>
+        Он привязан к экрану, который вы просматривали 
+    </div>
+</div>
+
+<script>
+    // ========== СЛАЙДЕР 15 ЭКРАНОВ ==========
+    const track = document.getElementById('sliderTrack');
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const prevBtn = document.getElementById('prevSlideBtn');
+    const nextBtn = document.getElementById('nextSlideBtn');
+    const dotsContainer = document.getElementById('dotsContainer');
+    const counterInfo = document.getElementById('counterInfo');
+    let currentIdx = 0;
+    const total = slides.length; // 15 экранов
+
+    const currentScreenNameSpan = document.getElementById('currentScreenName');
+    const relatedScreenSelect = document.getElementById('relatedScreen');
+
+    function updateCounter() {
+        counterInfo.textContent = `Экран ${currentIdx + 1} из ${total}`;
+    }
+
+    function updateScreenBinding() {
+        const currentSlide = slides[currentIdx];
+        const screenValue = currentSlide.getAttribute('data-screen') || 
+                           currentSlide.querySelector('.slide-caption')?.innerText || 
+                           'Экран ' + (currentIdx + 1);
+        
+        currentScreenNameSpan.textContent = screenValue;
+        
+        let found = false;
+        for (let i = 0; i < relatedScreenSelect.options.length; i++) {
+            if (relatedScreenSelect.options[i].text.includes(screenValue.split('—')[0].trim()) ||
+                relatedScreenSelect.options[i].value.includes(screenValue.split('—')[0].trim())) {
+                relatedScreenSelect.selectedIndex = i;
+                found = true;
+                break;
+            }
+        }
+    }
+
+    function updateDotsAndTrack() {
+        const dots = document.querySelectorAll('.dot');
+        dots.forEach((dot, i) => {
+            if(i === currentIdx) dot.classList.add('active');
+            else dot.classList.remove('active');
+        });
+        track.style.transform = `translateX(-${currentIdx * 100}%)`;
+        updateCounter();
+        updateScreenBinding();
+    }
+
+    function goToSlide(index) {
+        if(index < 0) index = 0;
+        if(index >= total) index = total - 1;
+        currentIdx = index;
+        updateDotsAndTrack();
+    }
+
+    function createDots() {
+        dotsContainer.innerHTML = '';
+        for(let i = 0; i < total; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if(i === currentIdx) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(i));
+            dotsContainer.appendChild(dot);
+        }
+    }
+
+    prevBtn.addEventListener('click', () => goToSlide(currentIdx - 1));
+    nextBtn.addEventListener('click', () => goToSlide(currentIdx + 1));
+    window.addEventListener('keydown', (e) => {
+        if(e.key === 'ArrowLeft') goToSlide(currentIdx - 1);
+        if(e.key === 'ArrowRight') goToSlide(currentIdx + 1);
+    });
+    createDots();
+    updateDotsAndTrack();
+
+    // ========== ОТПРАВКА НА ПОЧТУ ==========
+    const YOUR_EMAIL = "fukkatsu.ar@gmail.com";
+    const FORM_SUBMIT_URL = "https://formsubmit.co/ajax/" + YOUR_EMAIL;
+
+    const form = document.getElementById('reviewForm');
+    const toastEl = document.getElementById('thanksToast');
+
+    function showThanksPopup() {
+        toastEl.classList.add('show');
+        setTimeout(() => {
+            toastEl.classList.remove('show');
+        }, 5000);
+    }
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const name = document.getElementById('reviewerName').value.trim();
+        const ratingElem = document.querySelector('input[name="reviewRating"]:checked');
+        const rating = ratingElem ? ratingElem.value + ' ★' : 'не указана';
+        const screen = document.getElementById('relatedScreen').value;
+        const comment = document.getElementById('reviewText').value.trim();
+
+        if (!name || !comment) {
+            alert('Пожалуйста, заполните имя и текст отзыва');
+            return;
+        }
+
+        const currentDate = new Date().toLocaleString('ru-RU');
+        
+        const plainText = `
+🎨 НОВЫЙ ОТЗЫВ О ДИЗАЙНЕ — PRESET
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+👤 Имя: ${name}
+⭐ Оценка: ${rating}
+📱 Экран: ${screen}
+💬 Отзыв: 
+${comment}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📅 Дата: ${currentDate}
+        `.trim();
+
+        try {
+            const response = await fetch(FORM_SUBMIT_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: name,
+                    email: YOUR_EMAIL,
+                    subject: `[PRESET] Отзыв о дизайне — ${screen.substring(0, 50)} от ${name}`,
+                    message: plainText,
+                    _template: "table",
+                    _captcha: "false"
+                })
+            });
+
+            const result = await response.json();
+            
+            if (response.ok || result.success) {
+                showThanksPopup();
+                form.reset();
+                const starsInputs = document.querySelectorAll('input[name="reviewRating"]');
+                starsInputs.forEach(input => input.checked = false);
+                console.log('✅ Отзыв отправлен! Привязан к экрану:', screen);
+            } else {
+                throw new Error('Ошибка');
+            }
+        } catch (error) {
+            console.error('Ошибка:', error);
+            const mailtoLink = `mailto:${YOUR_EMAIL}?subject=[PRESET] Отзыв о дизайне — ${encodeURIComponent(screen)}&body=${encodeURIComponent(plainText)}`;
+            if (confirm('Не удалось отправить автоматически. Открыть почтовую программу?')) {
+                window.location.href = mailtoLink;
+                showThanksPopup();
+            } else {
+                alert('Отзыв сохранён. Скопируйте его и отправьте на fukkatsu.ar@gmail.com');
+                showThanksPopup();
+            }
+        }
+    });
+</script>
+</body>
+</html>
